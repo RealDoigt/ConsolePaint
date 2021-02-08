@@ -17,14 +17,14 @@ class InvalidAngleException(ArgumentException):
 static class Painting:
 """This class allows you to program the console window's inner appearance."""
 	
-	public brush as char = "█"[0]
+	public brush = char('█')
 	
 	private def Draw(posX as short, posY as short):
 		
 		Console.SetCursorPosition(posX, posY)
 		Console.Write(brush)
 	
-	public def DrawCell(posX as short, posY as short, color as ConsoleColor):
+	def DrawCell(posX as short, posY as short, color as ConsoleColor):
 		
 		if posX < 0 or posY < 0:
 			raise NegativeCoordinateException()
@@ -37,7 +37,7 @@ static class Painting:
 		Draw(posX, posY)
 		Console.ForegroundColor = previousColor
 	
-	public def DrawHorizontalLine(posX as short, posY as short, length as short, color as ConsoleColor):
+	def DrawHorizontalLine(posX as short, posY as short, length as short, color as ConsoleColor):
 		
 		if length < 0:
 			raise NegativeLengthException()
@@ -50,7 +50,7 @@ static class Painting:
 		
 		DrawLine({count as short|Draw(posX + count, posY)}, length, color)
 	
-	public def DrawVerticalLine(posX as short, posY as short, length as short, color as ConsoleColor):
+	def DrawVerticalLine(posX as short, posY as short, length as short, color as ConsoleColor):
 		
 		if length < 0:
 			raise NegativeLengthException()
@@ -63,7 +63,7 @@ static class Painting:
 		
 		DrawLine({count as short|Draw(posX, posY + count)}, length, color)
 	
-	public def DrawDiagonalLine(posX as short, posY as short, length as short, color as ConsoleColor, angle as sbyte):
+	def DrawDiagonalLine(posX as short, posY as short, length as short, color as ConsoleColor, angle as sbyte):
 		
 		// this is a temporary limitation until I get around to implementing more varied types of angles
 		if Math.Abs(angle) > 1 or angle == 0:
@@ -80,7 +80,7 @@ static class Painting:
 			
 		DrawLine({count as short|Draw(posX + count, posY + count * angle)}, length, color)
 		
-	public def DrawImage(image as Drawing.Bitmap, posX as short, posY as short):
+	def DrawImage(image as Drawing.Bitmap, posX as short, posY as short):
 		
 		if posX < 0 or posY < 0:
 			raise NegativeCoordinateException()
@@ -98,11 +98,11 @@ static class Painting:
 				Console.ForegroundColor = Palette.ColorToConsoleColor(image.GetPixel(scount, count))
 				Draw(posX + scount, posY + count)
 	
-	public def MakeMonochrome(image as Drawing.Bitmap) as ConsoleImage:
+	def MakeMonochrome(image as Drawing.Bitmap) as ConsoleImage:
 	"""A convenient alternative to typing MakeMonochrome(image, gray)"""
 		return MakeMonochrome(image, Palette.Color.Gray)
 	
-	public def MakeMonochrome(image as Drawing.Bitmap, palette as Palette.Color) as ConsoleImage:
+	def MakeMonochrome(image as Drawing.Bitmap, palette as Palette.Color) as ConsoleImage:
 		
 		height = image.Height
 		width = image.Width
@@ -113,10 +113,10 @@ static class Painting:
 		
 		return ConsoleImage(colors)
 		
-	public def MakeDuochrome(image as Drawing.Bitmap) as ConsoleImage:
+	def MakeDuochrome(image as Drawing.Bitmap) as ConsoleImage:
 		return MakeDuochrome(image, Palette.DuoColor.Cyan_Blue);
 		
-	public def MakeDuochrome(image as Drawing.Bitmap, palette as Palette.DuoColor) as ConsoleImage:
+	def MakeDuochrome(image as Drawing.Bitmap, palette as Palette.DuoColor) as ConsoleImage:
 		
 		height = image.Height
 		width = image.Width
@@ -127,7 +127,7 @@ static class Painting:
 		
 		return ConsoleImage(colors)
 		
-	private def DrawLine(expr as callable(short) as void, length as short, color as ConsoleColor):
+	def DrawLine(expr as callable(short) as void, length as short, color as ConsoleColor):
 		
 		previousColor = Console.ForegroundColor
 		Console.ForegroundColor = color

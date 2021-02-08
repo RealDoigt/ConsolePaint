@@ -23,7 +23,7 @@ static class MenuMaking:
 		#AlphabetLowerCase
 		#AlphabetUpperCase
 	
-	public def GetRoman(number as int):
+	def GetRoman(number as int):
 		
 		if number > 3999:
 			raise StartingNumberTooHighException()
@@ -33,10 +33,10 @@ static class MenuMaking:
 			
 		return Numeral.ToRoman(number)
 	
-	public def MakeOrderedList(posX as byte, posY as byte, list as (string)):
+	def MakeOrderedList(posX as byte, posY as byte, list as (string)):
 		MakeOrderedList(posX, posY, list, OLNumeral.Decimal, 1, 1)
 		
-	public def MakeOrderedList(posX as byte, posY as byte, list as (string), numeral as OLNumeral, startingNumber as int, yPadding as byte):
+	def MakeOrderedList(posX as byte, posY as byte, list as (string), numeral as OLNumeral, startingNumber as int, yPadding as byte):
 		
 		if startingNumber < 1:
 			raise StartingNumberTooLowException()
@@ -80,10 +80,10 @@ static class MenuMaking:
 			Console.Write(". $(list[count])")
 			Console.CursorTop += yPadding
 			
-	public def MakeUnorderedList(posX as byte, posY as byte, list as (string)):
+	def MakeUnorderedList(posX as byte, posY as byte, list as (string)):
 		MakeUnorderedList(posX, posY, list, char('*'), 1)
 			
-	public def MakeUnorderedList(posX as byte, posY as byte, list as (string), bullet as char, yPadding as byte):
+	def MakeUnorderedList(posX as byte, posY as byte, list as (string), bullet as char, yPadding as byte):
 		
 		Console.CursorTop = posY
 		
@@ -93,15 +93,14 @@ static class MenuMaking:
 			Console.Write("$bullet $element")
 			Console.CursorTop += yPadding		
 	
-	public def MakeBorderedOL(posX as byte, posY as byte, list as (string), border as RectanglePainting.BorderType, color as ConsoleColor):
+	def MakeBorderedOL(posX as byte, posY as byte, list as (string), border as RectanglePainting.BorderType, color as ConsoleColor):
 		MakeBorderedOL(posX, posY, list, OLNumeral.Decimal, 1, 0, 1, border, 0, 0, color)
 	
-	public def MakeBorderedOL(posX as byte, posY as byte, list as (string), numeral as OLNumeral, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, color as ConsoleColor):
+	def MakeBorderedOL(posX as byte, posY as byte, list as (string), numeral as OLNumeral, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, color as ConsoleColor):
 		MakeBorderedOL(posX, posY, list, numeral, 1, xPadding, yPadding, border, 0, 0, color)
 	
-	public def MakeBorderedOL(posX as byte, posY as byte, list as (string), numeral as OLNumeral, startingNumber as int, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor):
+	def MakeBorderedOL(posX as byte, posY as byte, list as (string), numeral as OLNumeral, startingNumber as int, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor):
 		
-		# xExtra 
 		xExtra as byte
 		lastNumber = list.Length + startingNumber
 		
@@ -130,25 +129,16 @@ static class MenuMaking:
 		MakeOrderedList(posX + xPadding + 1, posY + 1, list, numeral, startingNumber, yPadding)
 		DrawBorders(posX, posY, list, xPadding, yPadding, border, minBorderWidth, minBorderHeight, color, xExtra)
 		
-	public def MakeBorderedUL(posX as byte, posY as byte, list as (string), border as RectanglePainting.BorderType, color as ConsoleColor):
+	def MakeBorderedUL(posX as byte, posY as byte, list as (string), border as RectanglePainting.BorderType, color as ConsoleColor):
 		MakeBorderedUL(posX, posY, list, char('*'), 0, 1, border, 0, 0, color)
 	
-	public def MakeBorderedUL(posX as byte, posY as byte, list as (string), bullet as char, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, color as ConsoleColor):
+	def MakeBorderedUL(posX as byte, posY as byte, list as (string), bullet as char, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, color as ConsoleColor):
 		MakeBorderedUL(posX, posY, list, bullet, xPadding, yPadding, border, 0, 0, color)
 	
-	public def MakeBorderedUL(posX as byte, posY as byte, list as (string), bullet as char, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor):
+	def MakeBorderedUL(posX as byte, posY as byte, list as (string), bullet as char, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor):
 		
 		MakeUnorderedList(posX + xPadding + 1, posY + 1, list, bullet, yPadding)
 		DrawBorders(posX, posY, list, xPadding, yPadding, border, minBorderWidth, minBorderHeight, color, 2)
-
-	public def MakeBorderedText(posX as byte, posY as byte, text as string, border as RectanglePainting.BorderType, color as ConsoleColor, isJustified as bool):
-		MakeBorderedText(posX, posY, text, 0, 0, border, 0, 0, color)
-	
-	public def MakeBorderedText(posX as byte, posY as byte, text as string, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, color as ConsoleColor, isJustified as bool):
-		MakeBorderedText(posX, posY, text, xPadding, yPadding, border, 0, 0, color)
-		
-	public def MakeBorderedText(posX as byte, posY as byte, text as string, xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor):
-		pass
 		
 	private def DrawBorders(posX as byte, posY as byte, list as (string), xPadding as byte, yPadding as byte, border as RectanglePainting.BorderType, minBorderWidth as byte, minBorderHeight as byte, color as ConsoleColor, xExtra as byte):
 		
@@ -164,10 +154,10 @@ static class MenuMaking:
 			
 		RectanglePainting.DrawRectangle(border, posX, posY, height + 2, width + 2, color) // 2 is the border's total character space
 	
-	public def GetSelection(posX as byte, posY as byte, listLength as byte):
+	def GetSelection(posX as byte, posY as byte, listLength as byte):
 		return GetSelection(posX, posY, listLength, 1, char('>'))
 		
-	public def GetSelection(posX as byte, posY as byte, listLength as byte, yPadding as byte, cursor as char):
+	def GetSelection(posX as byte, posY as byte, listLength as byte, yPadding as byte, cursor as char):
 		
 		selection as byte = 0
 		Console.CursorTop = posY
@@ -208,7 +198,7 @@ static class MenuMaking:
 				
 		return largest
 	
-	# Wanted to do a callable() as string with params but it will not allow it
+	# Wanted to do a callable or something like that as string, will do that later
 	private def FindLargestRoman(listLength as int):
 		 
 		 largest = 0
