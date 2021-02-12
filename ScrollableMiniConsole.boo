@@ -18,7 +18,7 @@ class ScrollableMiniConsole(MiniConsole):
 	
 	Text:
 		get:
-			return text.ToArray().ToString()
+			return string(text.ToArray())
 			
 	Count:
 		get:
@@ -101,7 +101,7 @@ class ScrollableMiniConsole(MiniConsole):
 			raise IndexLargerThanSizeException()
 		
 		# 2 is the number of chars taken up by the borders
-		maxChars = Width * Height - 2 + (chars * -1) 
+		maxChars = Width * Height - 2 + (chars * - 1) 
 		
 		# Sorry about the mess! These will be cleaned up a bit later; I needed something fast to test this 
 		msg = Text[-maxChars:newIndex]
