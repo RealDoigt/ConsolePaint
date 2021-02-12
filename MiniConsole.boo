@@ -255,7 +255,7 @@ class MiniConsole:
 			
 			break unless keyInfo.Key != ConsoleKey.Enter
 			
-		return characters.ToArray().ToString()
+		return string(characters.ToArray())
 		
 	virtual def ReadLine(foregroundColor as ConsoleColor):
 		
