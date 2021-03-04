@@ -4,7 +4,7 @@ import System
 
 public static class Palette:
 	
-	internal def ConsoleColorToColor(color as ConsoleColor) as Drawing.Color:
+	internal def ConsoleColorToColor(color as ConsoleColor):
 		
 		if color == ConsoleColor.Black:
 			return Drawing.Color.Black
@@ -53,26 +53,26 @@ public static class Palette:
 		
 		return Drawing.Color.White
 	
-	// Here's an explanation of how bitwise operations work for noobs like me: https://www.alanzucconi.com/2015/07/26/enum-flags-and-bitwise-operators/
-	// Original code by Malwyn at https://stackoverflow.com/questions/1988833/converting-color-to-consolecolor/29192463#29192463
-	// Basically how it works is it is changing the value of the index at the bit level.
-	internal def ColorToConsoleColor(color as Drawing.Color) as ConsoleColor:
+	# Here's an explanation of how bitwise operations work for noobs like me: https://www.alanzucconi.com/2015/07/26/enum-flags-and-bitwise-operators/
+	# Original code by Malwyn at https://stackoverflow.com/questions/1988833/converting-color-to-consolecolor/29192463#29192463
+	# Basically how it works is it is changing the value of the index at the bit level.
+	internal def ColorToConsoleColor(color as Drawing.Color):
 		
 		index as short
 		
-		// I took the liberty to have || ("or" in boo) instead of | since | cannot be used like that in boo
-		// (or if there is a way, the documentation is lacking)	and secondly it doesn't matter if the other 
-		// parts of the condition are not evaluated; the bitwise operations begin after the index is set to 
-		// 8 even in the original code. So technically, this is a faster implementation.
+		# I took the liberty to have || ("or" in boo) instead of | since | cannot be used like that in boo
+		# (or if there is a way, the documentation is lacking)	and secondly it doesn't matter if the other 
+		# parts of the condition are not evaluated; the bitwise operations begin after the index is set to 
+		# 8 even in the original code. So technically, this is a faster implementation.
 		if color.B > 128 or color.G > 128 or color.R > 128:
 			index = 8 // 8 is the number of bits in a standard byte or octet
-			// Light colour
+			# Light colour
 			
 		else:
 			index = 0
-			// Dark colour
+			# Dark colour
 			
-		if  color.R > 64: // 64 is half of 128 which can be used as a treshold of sorts
+		if  color.R > 64: # 64 is half of 128 which can be used as a treshold of sorts
 			index |= 4
 			
 		else:
@@ -92,7 +92,34 @@ public static class Palette:
 			
 		return index cast ConsoleColor
 		
-	internal def ColorToMonochrome(color as Drawing.Color, palette as Color) as ConsoleColor:
+	internal def ColorToDarkConsoleColor(color as Drawing.Color):
+		
+		tolerance = 25
+		redTol = color.R + tolerance
+		blueTol = color.B + tolerance
+		greenTol = color.G + tolerance
+		
+		if color.R > greenTol and color.R > blueTol:
+			return ColorToMonochrome(color, Color.Red)
+			
+		if color.R > greenTol and color.B > greenTol:
+			return ColorToMonochrome(color, Color.Magenta)
+			
+		if color.R > blueTol and color.G > blueTol:
+			return ColorToMonochrome(color, Color.Yellow)
+			
+		if color.G > redTol and color.G > blueTol:
+			return ColorToMonochrome(color, Color.Green)
+
+		if color.G > redTol and color.B > redTol:
+			return ColorToMonochrome(color, Color.Cyan)
+			
+		if color.B > greenTol and color.B > redTol:
+			return ColorToMonochrome(color, Color.Blue)
+			
+		return ColorToMonochrome(color, Color.Gray)
+		
+	internal def ColorToMonochrome(color as Drawing.Color, palette as Color):
 		
 		// this is done because 100 is easily divisible by 4, which is the amount of colours available in
 		// a monochrome palette. However, since it's originally a float, 25 and 75 are rounded down.
@@ -109,7 +136,7 @@ public static class Palette:
 			
 		return ConsoleColor.White
 		
-	internal def ColorToDuochrome(color as Drawing.Color, palette as DuoColor) as ConsoleColor:
+	internal def ColorToDuochrome(color as Drawing.Color, palette as DuoColor):
 		
 		brightness = (color.GetBrightness() * 10) cast byte
 		
@@ -128,12 +155,12 @@ public static class Palette:
 			
 		return ConsoleColor.White
 		
-//	internal def ColorToCompositeMonochrome(color as Drawing.Color, palette as CompositeColor):
-//		
-//		brightness = (color.GetBrightness() * 10) cast byte
-		
-//	internal def CompositeToShade(palette as ComplexColor, tone as Shade):
-//		pass
+#	internal def ColorToCompositeMonochrome(color as Drawing.Color, palette as CompositeColor):
+#		
+#		brightness = (color.GetBrightness() * 10) cast byte
+#		
+#	internal def CompositeToShade(palette as ComplexColor, tone as Shade):
+#		pass
 
 	internal def ConsoleColorToSimpleColor(color as ConsoleColor):
 		

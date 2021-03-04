@@ -80,7 +80,7 @@ static class Painting:
 			
 		DrawLine({count as short|Draw(posX + count, posY + count * angle)}, length, color)
 		
-	def DrawImage(image as Drawing.Bitmap, posX as short, posY as short):
+	private def DrawImage(image as Drawing.Bitmap, posX as short, posY as short, convert as callable(Drawing.Color) as ConsoleColor):
 		
 		if posX < 0 or posY < 0:
 			raise NegativeCoordinateException()
@@ -95,8 +95,14 @@ static class Painting:
 			
 			for scount in range(width):
 				
-				Console.ForegroundColor = Palette.ColorToConsoleColor(image.GetPixel(scount, count))
+				Console.ForegroundColor = convert(image.GetPixel(scount, count))
 				Draw(posX + scount, posY + count)
+		
+	def DrawImage(image as Drawing.Bitmap, posX as short, posY as short):
+		DrawImage(image, posX, posY, Palette.ColorToConsoleColor)
+				
+	def DrawDarkImage(image as Drawing.Bitmap, posX as short, posY as short):
+		DrawImage(image as Drawing.Bitmap, posX, posY, Palette.ColorToDarkConsoleColor)
 	
 	def MakeMonochrome(image as Drawing.Bitmap) as ConsoleImage:
 	"""A convenient alternative to typing MakeMonochrome(image, gray)"""
