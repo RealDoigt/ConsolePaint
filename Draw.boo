@@ -133,7 +133,7 @@ static class Painting:
 		
 		return ConsoleImage(colors)
 		
-	def DrawLine(expr as callable(short) as void, length as short, color as ConsoleColor):
+	private def DrawLine(expr as callable(short) as void, length as short, color as ConsoleColor):
 		
 		previousColor = Console.ForegroundColor
 		Console.ForegroundColor = color
@@ -148,3 +148,21 @@ static class Painting:
 		for count in range(height):
 			for scount in range(width):
 				expr(scount, count)
+				
+	def DrawSpinningAnimation(expr as Func[of bool], millisecondDelay as int):
+		
+		x = Console.CursorLeft cast byte
+		count as byte = 0
+		animationFrames = "|/-\\"
+		
+		while expr():
+			
+			Console.Write(animationFrames[count])
+			Console.CursorLeft = x
+			++count
+			
+			if millisecondDelay > 0:
+				Threading.Thread.Sleep(millisecondDelay)
+			
+			if count == 4:
+				count = 0

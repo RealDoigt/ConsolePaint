@@ -11,7 +11,7 @@ class ConsoleImage:
 
 	private colors as (ConsoleColor, 2)
 	
-	public def constructor(bitmap as Drawing.Bitmap):
+	def constructor(bitmap as Drawing.Bitmap):
 	"""This constructor instantiates the class by converting colours to the limited .Net palette."""
 		
 		colors = matrix(ConsoleColor, bitmap.Height, bitmap.Width)
@@ -21,7 +21,7 @@ class ConsoleImage:
 		
 		Painting.MakeImage({x as short, y as short|colors[y, x] = Palette.ColorToConsoleColor(bitmap.GetPixel(x, y))}, height, width)
 				
-	public def constructor(NCIFilePath as string):
+	def constructor(NCIFilePath as string):
 	"""
 	This constructor initiates the class by rebuilding the image from a binary data file. 
 	NCI stands for .Net Console Image
@@ -32,11 +32,11 @@ class ConsoleImage:
 	"""An internal constructor intended for building monochromatic ConsoleImages"""
 		colors = multiColorArray
 				
-	public def Paint():
+	def Paint():
 	"""This method calls the PaintAt method using 0 as the value of both parameters."""
 		PaintAt(0, 0)
 				
-	public virtual def PaintAt(posX as short, posY as short):
+	virtual def PaintAt(posX as short, posY as short):
 	"""
 	@summary This method draws on the screen the pixel data this instance holds.
 	@posX X coordinate of the cursor's starting position.
@@ -46,15 +46,15 @@ class ConsoleImage:
 	# and may very well never get implemented.
 		Painting.MakeImage({x as short, y as short|Painting.DrawCell(posX + x, posY + y, colors[y, x])}, Height, Width)
 				
-	public Height as int:
+	Height as int:
 		get:
 			return colors.GetLength(0)
 			
-	public Width as int:
+	Width as int:
 		get:
 			return colors.GetLength(1)
 			
-	public def PaintToFile(filePath as string):
+	def PaintToFile(filePath as string):
 	"""This method calls ToBitmap then uses the resulting instance's Save method to produce a Png file."""
 		ToBitmap().Save(filePath, Drawing.Imaging.ImageFormat.Png)
 		
@@ -122,7 +122,7 @@ class ConsoleImage:
 				++count
 				
 		
-	public virtual def WriteToFile(NCIFilePath as string):
+	virtual def WriteToFile(NCIFilePath as string):
 	"""Writes to file the pixel data this instance contains using a custom image format; the .Net Console Image. (using RLE encoding)"""
 		
 		if Height > byte.MaxValue or Width > byte.MaxValue:
@@ -191,7 +191,7 @@ class ConsoleImage:
 			
 		return result.ToArray()
 	
-	public def ToBitmap() as Drawing.Bitmap:
+	def ToBitmap() as Drawing.Bitmap:
 	"""This method converts this instance of console image to a bitmap, however the colour's quality loss remains."""
 		
 		image = Drawing.Bitmap(Width, Height)
@@ -200,10 +200,12 @@ class ConsoleImage:
 		
 		return image
 	
-	public self[x as int, y as int] as ConsoleColor:
-		
+	self[x as int, y as int]:
 		get:
 			return colors[y, x]
 			
 		set:
 			colors[y, x] = value
+			
+	override def ToString():
+		return "$Width by $Height image"
