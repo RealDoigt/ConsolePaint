@@ -104,11 +104,11 @@ static class Painting:
 	def DrawDarkImage(image as Drawing.Bitmap, posX as short, posY as short):
 		DrawImage(image as Drawing.Bitmap, posX, posY, Palette.ColorToDarkConsoleColor)
 	
-	def MakeMonochrome(image as Drawing.Bitmap) as ConsoleImage:
+	def MakeMonochrome(image as Drawing.Bitmap):
 	"""A convenient alternative to typing MakeMonochrome(image, gray)"""
 		return MakeMonochrome(image, Palette.Color.Gray)
 	
-	def MakeMonochrome(image as Drawing.Bitmap, palette as Palette.Color) as ConsoleImage:
+	def MakeMonochrome(image as Drawing.Bitmap, palette as Palette.Color):
 		
 		height = image.Height
 		width = image.Width
@@ -119,10 +119,10 @@ static class Painting:
 		
 		return ConsoleImage(colors)
 		
-	def MakeDuochrome(image as Drawing.Bitmap) as ConsoleImage:
+	def MakeDuochrome(image as Drawing.Bitmap):
 		return MakeDuochrome(image, Palette.DuoColor.Cyan_Blue);
 		
-	def MakeDuochrome(image as Drawing.Bitmap, palette as Palette.DuoColor) as ConsoleImage:
+	def MakeDuochrome(image as Drawing.Bitmap, palette as Palette.DuoColor):
 		
 		height = image.Height
 		width = image.Width
@@ -153,7 +153,7 @@ static class Painting:
 		
 		x = Console.CursorLeft cast byte
 		count as byte = 0
-		animationFrames = "|/-\\"
+		animationFrames = "|/\\-"
 		
 		while expr():
 			
@@ -164,5 +164,22 @@ static class Painting:
 			if millisecondDelay > 0:
 				Threading.Thread.Sleep(millisecondDelay)
 			
-			if count == 4:
+			if count == animationFrames.Length:
 				count = 0
+				
+	def MakeComposite(image as Drawing.Bitmap, tolerance as byte):
+		
+		complexImage = ComplexConsoleImage(image.Height, image.Width)
+		
+		def setCell(x as short, y as short):
+			
+			character = Palette.GetCompositeFromName(Palette.ColorToComposite(image.GetPixel(x, y), tolerance))
+			complexImage.SetGlyph(x, y, character.character)
+			complexImage.SetBackground(x, y, character.backgroundColor)
+			complexImage[x, y] = character.foregroundColor
+			
+		MakeImage(setCell, complexImage.Height, complexImage.Width)
+		
+		return complexImage
+		
+		

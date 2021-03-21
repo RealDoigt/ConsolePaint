@@ -134,6 +134,8 @@ class ProgressBar:
 			
 			Painting.DrawHorizontalLine(Console.CursorLeft, Console.CursorTop, (currentValue cast double / maxValue cast double) * width, foregroundColor)
 			
+			Console.CursorLeft = width + 1
+			
 			if ends == Ends.Bracket:
 				Console.Write("]")
 				

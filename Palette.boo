@@ -191,15 +191,207 @@ public static class Palette:
 			
 		return (color cast int) cast ConsoleColor
 		
+	internal def ColorToComposite(color as Drawing.Color, tolerance as byte):
+		
+		brightness = (color.GetBrightness() * 10) cast byte
+			
+		if brightness < 2:
+			return CompositeColor.Black
+
+		elif brightness > 8:
+			return CompositeColor.White
+			
+		shade as Shade
+			
+		if brightness == 2:
+			shade = Shade.Darkest
+			
+		elif brightness == 3:
+			shade = Shade.Darker
+			
+		elif brightness == 4:
+			shade = Shade.Dark
+			
+		elif brightness == 5:
+			shade = Shade.None
+			
+		elif brightness == 6:
+			shade = Shade.Light
+			
+		elif brightness == 7:
+			shade = Shade.Lighter
+		
+		else:
+			shade = Shade.Lightest
+			
+		# this section compares the effective range of each type of light (r,g,b)
+		# against each other to determine the color
+		# 0: the two colors are equal
+		# -1: b is greater than a
+		# 1: a is greater than b
+		
+		def compareRanges(lightA as byte, lightB as byte):
+			
+			if lightA == lightB:
+				return 0
+				
+			colorRange = 0
+			
+			if lightA <= lightB + tolerance and lightA >= lightB - tolerance:
+				++colorRange # a is in b's range
+				
+			if lightB <= lightA + tolerance and lightB >= lightA - tolerance:
+				++colorRange # a is in b's range
+				
+			if colorRange == 2:
+				return 0
+				
+			if lightA > lightB:
+				return 1
+			
+			return -1
+		
+		simpleColor as Color
+		
+		bgComparison = compareRanges(color.B, color.G)
+		brComparison = compareRanges(color.B, color.R)
+		grComparison = compareRanges(color.G, color.R)
+		
+		# Don't mess with this order
+		if bgComparison == 0 and brComparison == 0 or brComparison == 0 and grComparison == 0:
+			simpleColor = Color.Gray
+			
+		elif bgComparison == 0:
+			simpleColor = Color.Cyan
+			
+		elif brComparison == 0:
+			simpleColor = Color.Magenta
+			
+		elif grComparison == 0:
+			simpleColor = Color.Yellow
+			
+		elif bgComparison == 1:
+			simpleColor = Color.Blue
+			
+		elif grComparison == 1:
+			simpleColor = Color.Green
+			
+		else:
+			simpleColor = Color.Red
+		
+		if shade != Shade.None:
+			return (Enum).Parse(CompositeColor, "$shade$simpleColor")
+			
+		else:
+			return (simpleColor cast int) cast CompositeColor
+	
+	def GetCompositeFromName(color as CompositeColor):
+		
+		if color == CompositeColor.White:
+			return ColorChar(ConsoleColor.White, ConsoleColor.White, char('█'))
+			
+		elif color == CompositeColor.Black:
+			return ColorChar(ConsoleColor.Black, ConsoleColor.Black, char('█'))
+		
+		glyph as char
+		backColor as ConsoleColor
+		foreColor as ConsoleColor
+		colorString = "$color"
+		
+		if colorString.Contains("White") or colorString.Contains("Darkest"):
+			glyph = char('░')
+			
+		elif colorString.Contains("Lightest") or colorString.Contains("Darker"):
+			glyph = char('▒')
+			
+		elif colorString.Contains("Lighter") or colorString.Contains("Dark"):
+			glyph = char('▓')
+
+		else:
+			glyph = char('█')
+			
+		if colorString.Contains("White") or colorString.Contains("Light"):
+			backColor = ConsoleColor.White
+			
+		else:
+			backColor = ConsoleColor.Black
+			
+		if backColor == ConsoleColor.Black:
+			if colorString.Contains("Blue"):
+				foreColor = ConsoleColor.DarkBlue
+				
+			elif colorString.Contains("Cyan"):
+				foreColor = ConsoleColor.DarkCyan
+				
+			elif colorString.Contains("Gray"):
+				foreColor = ConsoleColor.DarkGray
+				
+			elif colorString.Contains("Green"):
+				foreColor = ConsoleColor.DarkGreen
+				
+			elif colorString.Contains("Magenta"):
+				foreColor = ConsoleColor.DarkMagenta
+				
+			elif colorString.Contains("Red"):
+				foreColor = ConsoleColor.DarkRed
+				
+			else:
+				foreColor = ConsoleColor.DarkYellow
+				
+		else:
+			if colorString.Contains("Blue"):
+				foreColor = ConsoleColor.Blue
+				
+			elif colorString.Contains("Cyan"):
+				foreColor = ConsoleColor.Cyan
+				
+			elif colorString.Contains("Gray"):
+				foreColor = ConsoleColor.Gray
+				
+			elif colorString.Contains("Green"):
+				foreColor = ConsoleColor.Green
+				
+			elif colorString.Contains("Magenta"):
+				foreColor = ConsoleColor.Magenta
+				
+			elif colorString.Contains("Red"):
+				foreColor = ConsoleColor.Red
+				
+			else:
+				foreColor = ConsoleColor.Yellow
+				
+		return ColorChar(backColor, foreColor, glyph)
+		
 	internal enum CompositeColor:
-		LightBlue = 30
-		LightCyan = 31
-		LightGray = 32
-		LightGreen = 33 
-		LightMagenta = 34
-		LightRed = 35
-		LightYellow = 36
 		White = 15
+		WhiteBlue = 30
+		WhiteCyan = 31
+		WhiteGray = 32
+		WhiteGreen = 33 
+		WhiteMagenta = 34
+		WhiteRed = 35
+		WhiteYellow = 36
+		LightestBlue = 37
+		LightestCyan = 38
+		LightestGray = 39
+		LightestGreen = 40 
+		LightestMagenta = 41
+		LightestRed = 42
+		LightestYellow = 43
+		LighterBlue = 44
+		LighterCyan = 45
+		LighterGray = 46
+		LighterGreen = 47
+		LighterMagenta = 48
+		LighterRed = 49
+		LighterYellow = 50
+		LightBlue = 51
+		LightCyan = 52
+		LightGray = 53
+		LightGreen = 54 
+		LightMagenta = 55
+		LightRed = 56
+		LightYellow = 57
 		Blue = 9
 		Cyan = 11
 		Gray = 7
@@ -207,30 +399,30 @@ public static class Palette:
 		Magenta = 13
 		Red = 12
 		Yellow = 14
-		DarkBlue = 23
-		DarkCyan = 24
-		DarkGray = 25
-		DarkGreen = 26
-		DarkMagenta = 27
-		DarkRed = 28
-		DarkYellow = 29
-		DarkerBlue = 1
-		DarkerCyan = 3
-		DarkerGray = 8
-		DarkerGreen = 2
-		DarkerMagenta = 5
-		DarkerRed = 4
-		DarkerYellow = 6
+		DarkBlue = 1
+		DarkCyan = 3
+		DarkGray = 8
+		DarkGreen = 2
+		DarkMagenta = 5
+		DarkRed = 4
+		DarkYellow = 6
+		DarkerBlue = 16
+		DarkerCyan = 17
+		DarkerGray = 18
+		DarkerGreen = 19
+		DarkerMagenta = 20
+		DarkerRed = 21
+		DarkerYellow = 22
+		DarkestBlue = 23
+		DarkestCyan = 24
+		DarkestGray = 25
+		DarkestGreen = 26
+		DarkestMagenta = 27
+		DarkestRed = 28
+		DarkestYellow = 29
 		Black = 0
-		DarkestBlue = 16
-		DarkestCyan = 17
-		DarkestGray = 18
-		DarkestGreen = 19
-		DarkestMagenta = 20
-		DarkestRed = 21
-		DarkestYellow = 22
 		
-	public enum Color:
+	enum Color:
 		Blue = 9
 		Cyan = 11
 		Gray = 7
@@ -250,7 +442,7 @@ public static class Palette:
 		Yellow = 14
 		White = 15
 		
-	public enum DuoColor:
+	enum DuoColor:
 		Cyan_Blue = 9
 		Magenta_Red = 12
 		Yellow_Green = 10
@@ -261,3 +453,5 @@ public static class Palette:
 		Dark
 		Darker
 		Darkest
+		Lighter
+		Lightest
