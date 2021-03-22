@@ -221,8 +221,11 @@ public static class Palette:
 		elif brightness == 7:
 			shade = Shade.Lighter
 		
-		else:
+		elif brightness == 8:
 			shade = Shade.Lightest
+			
+		else:
+			shade = Shade.White
 			
 		# this section compares the effective range of each type of light (r,g,b)
 		# against each other to determine the color
@@ -257,27 +260,26 @@ public static class Palette:
 		brComparison = compareRanges(color.B, color.R)
 		grComparison = compareRanges(color.G, color.R)
 		
-		# Don't mess with this order
-		if bgComparison == 0 and brComparison == 0 or brComparison == 0 and grComparison == 0:
-			simpleColor = Color.Gray
-			
-		elif bgComparison == 0:
-			simpleColor = Color.Cyan
-			
-		elif brComparison == 0:
-			simpleColor = Color.Magenta
-			
-		elif grComparison == 0:
-			simpleColor = Color.Yellow
-			
-		elif bgComparison == 1:
+		if bgComparison == 1 and brComparison == 1:
 			simpleColor = Color.Blue
 			
-		elif grComparison == 1:
+		elif bgComparison == -1 and grComparison == 1:
 			simpleColor = Color.Green
 			
-		else:
+		elif brComparison == -1 and grComparison == -1:
 			simpleColor = Color.Red
+			
+		elif bgComparison == 0 and brComparison != 0 and grComparison != 0:
+			simpleColor = Color.Cyan
+			
+		elif bgComparison != 0 and brComparison == 0 and grComparison != 0:
+			simpleColor = Color.Magenta
+			
+		elif bgComparison != 0 and brComparison != 0 and grComparison == 0:
+			simpleColor = Color.Yellow
+			
+		else:
+			simpleColor = Color.Gray
 		
 		if shade != Shade.None:
 			return (Enum).Parse(CompositeColor, "$shade$simpleColor")
@@ -455,3 +457,4 @@ public static class Palette:
 		Darkest
 		Lighter
 		Lightest
+		White
