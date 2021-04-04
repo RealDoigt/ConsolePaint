@@ -66,7 +66,7 @@ static class Painting:
 	def DrawDiagonalLine(posX as short, posY as short, length as short, color as ConsoleColor, angle as sbyte):
 		
 		// this is a temporary limitation until I get around to implementing more varied types of angles
-		if Math.Abs(angle) > 1 or angle == 0:
+		if Math.Abs(angle) != 1:
 			raise InvalidAngleException()
 		
 		if length < 0:
@@ -102,7 +102,7 @@ static class Painting:
 		DrawImage(image, posX, posY, Palette.ColorToConsoleColor)
 				
 	def DrawDarkImage(image as Drawing.Bitmap, posX as short, posY as short):
-		DrawImage(image as Drawing.Bitmap, posX, posY, Palette.ColorToDarkConsoleColor)
+		DrawImage(image, posX, posY, Palette.ColorToDarkConsoleColor)
 	
 	def MakeMonochrome(image as Drawing.Bitmap):
 	"""A convenient alternative to typing MakeMonochrome(image, gray)"""
