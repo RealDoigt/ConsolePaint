@@ -19,6 +19,19 @@ static class Painting:
 	
 	public brush = char('█')
 	
+	private originalCursorLeft = 0
+	private originalCursorTop = 0
+	
+	def SaveCursor():
+		
+		originalCursorLeft = Console.CursorLeft
+		originalCursorTop = Console.CursorTop
+		
+	def RestoreCursor():
+		
+		Console.CursorLeft = originalCursorLeft
+		Console.CursorTop = originalCursorTop
+	
 	private def Draw(posX as short, posY as short):
 		
 		Console.SetCursorPosition(posX, posY)
