@@ -27,13 +27,27 @@ struct ColorChar(IColorText):
 		Console.BackgroundColor = currentBackground
 		Console.ForegroundColor = currentForeground
 		
+	private def OptimisedWrite():
+		
+		Console.BackgroundColor = backgroundColor
+		Console.ForegroundColor = foregroundColor
+		
+		Console.Write(character)
+		
 	def WriteLine():
 		Write()
-		Console.Write("\n")
+		Console.WriteLine()
 		
 	static def Write(colorChars as (ColorChar)):
+		
+		currentBackground = Console.BackgroundColor
+		currentForeground = Console.ForegroundColor
+		
 		for colorChar in colorChars:
-			colorChar.Write()
+			colorChar.OptimisedWrite()
+			
+		Console.BackgroundColor = currentBackground
+		Console.ForegroundColor = currentForeground
 			
 	static def WriteLine(colorChars as (ColorChar)):
 		
@@ -58,22 +72,22 @@ struct ColorChar(IColorText):
 		countColors(colorCounts)
 		countColors(backColorCounts)
 		
-		def findBestCount(dict as Dictionary[of ConsoleColor, int]) as ConsoleColor:
+		def findMost(dict as Dictionary[of ConsoleColor, int]) as ConsoleColor:
 			
-			bestCount = 0
-			bestColor as ConsoleColor
+			mostCount = 0
+			mostColor as ConsoleColor
 			
 			for pair in dict:
 				
-				if pair.Value > bestCount:
+				if pair.Value > mostCount:
 					
-					bestCount = pair.Value
-					bestColor = pair.Key
+					mostCount = pair.Value
+					mostColor = pair.Key
 					
-			return bestColor
+			return mostColor
 			
-		backColor = findBestCount(backColorCounts)
-		pair = findBestCount(colorCounts)
+		backColor = findMost(backColorCounts)
+		pair = findMost(colorCounts)
 		str = ToString(colorChars)
 		
 		return ColorString(backColor, pair, str)
@@ -84,8 +98,7 @@ struct ColorChar(IColorText):
 		for colorChar in colorChars:
 			str = "$str$(colorChar.character)"
 			
-		return str
-			
+		return str			
 		
 	override def ToString():
 		return "$character"
