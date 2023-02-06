@@ -5,12 +5,12 @@ import System
 static class RectanglePainting:
 	
 	// These must have the same order as BorderType
-	private Verticals as string = "┃│║:|╎┇┋"
-	private Horizontals as string = "━─═.-╌┄┈"
-	private topLeftCorners as string = "┏┌╔.+╭,."
-	private topRightCorners as string = "┓┐╗.+╮,."
-	private bottomLeftCorners as string = "┗└╚.+╰' "
-	private bottomRightCorners as string = "┛┘╝.+╯' "	
+	final private Verticals as string = "┃│║:|╎┇┋"
+	final private Horizontals as string = "━─═.-╌┄┈"
+	final private topLeftCorners as string = "┏┌╔.+╭,."
+	final private topRightCorners as string = "┓┐╗.+╮,."
+	final private bottomLeftCorners as string = "┗└╚:+╰' "
+	final private bottomRightCorners as string = "┛┘╝:+╯' "	
 	
 	public enum BorderType:
 		Heavy
@@ -61,16 +61,16 @@ static class RectanglePainting:
 	private def ChangeBrushCS(count as int):
 		
 			if count % 4 == 0:
-				Painting.brush = "♦"[0]
+				Painting.brush = char('♦')
 				
 			elif count % 3 == 0:
-				Painting.brush = "♥"[0]
+				Painting.brush = char('♥')
 				
 			elif count % 2 == 0:
-				Painting.brush = "♣"[0]
+				Painting.brush = char('♣')
 				
 			else:
-				Painting.brush = "♠"[0]
+				Painting.brush = char('♠')
 			
 	public def DrawSquare(posX as byte, posY as byte, length as byte, color as ConsoleColor):
 		DrawRectangle(posX, posY, length, length, color)
