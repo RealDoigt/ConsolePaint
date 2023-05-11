@@ -1,50 +1,7 @@
 # ConsolePaint
 ConsolePaint is a Console UI library for .Net which doesn't use unmanaged and windows exclusive libraries. It can also handle images and display them in the console window.
 
-# How to Install
-## Visual Studio Code
-First, you'll need the DLLs for Boo and ConsolePaint.
+![image](https://github.com/RealDoigt/ConsolePaint/assets/57451013/5485e54b-13b3-4fdb-844e-4f106899611c)
+![image](https://github.com/RealDoigt/ConsolePaint/assets/57451013/cba29a8e-4542-4257-8a38-c679180e6c00)
+![image](https://github.com/RealDoigt/ConsolePaint/assets/57451013/004bf623-2db0-4b94-a21f-80a72b6ddee5)
 
-Next, import them to your workspace
-```
-.   My Project
-├── .vscode
-├── bin
-├── obj
-< Import these below >
-├── Boo.Lang.dll
-├── ConsolePaint.dll 
-< Import these above >
-├── program.cs
-├── project.csproj
-```
-
-Go into your `.csproj` file, and add the following below.
-
-```xml
-  <ItemGroup>
-    <Reference Include="./Boo.Lang.dll"></Reference>
-    <Reference Include="./ConsolePaint.dll"></Reference>
-  </ItemGroup>
-```
-
-If you put them into a folder, make sure to include them.
-Like if you include them into a folder call `libs`; type like this instead.
-```xml
-<Reference Include="./libs/Boo.Lang.dll"></Reference>
-```
-
-Try the demo program to make sure it's working.
-
-```csharp
-using System;
-using System.Drawing;
-using ConsolePaint;
-
-namespace MyProgram {
-    class Program {
-        public static void Main(string[] args){
-            Painting.DrawCell(5, 2, ConsoleColor.Red);
-        }
-    }
-}
